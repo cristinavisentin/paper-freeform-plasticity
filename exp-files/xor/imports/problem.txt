@@ -1,0 +1,77 @@
+$lastIndexesXor = [-40:1:-1]        % last 40 (=10%)
+$lastIndexesParity5 = [-96:1:-1]    % last 96 (=10%)
+$lastIndexesMopm3 = [-192:1:-1]     % last 192 (=10%)
+
+$firstIndexesXor = [0:1:39]         % first 40 (=10%)
+$firstIndexesParity5 = [0:1:95]     % last 96 (=10%)
+$firstIndexesMopm3 = [0:1:191]      % last 192 (=10%)
+
+$qFunctions = f.allNamed(fs = m.sKeyMap(
+  keys = [behavior; maturePerformance; increase; inconsistency];
+  values = [
+    f.identity();
+    ds.e.sBool.avgScore(
+      scoreType = boolean;
+      caseIndexes = $lastIndexesXor
+    );
+    ea.f.numExpr(
+      expr = "-(x2;x1)";
+      args = [
+        ds.e.sBool.avgScore(
+          scoreType = unlimited;
+          caseIndexes = $firstIndexesXor
+        );
+        ds.e.sBool.avgScore(
+          scoreType = unlimited;
+          caseIndexes = $lastIndexesXor
+        )
+      ]
+    );
+    ds.e.sBool.sdtDevScore(
+      scoreType = unlimited;
+      indexes = $lastIndexesXor
+    )
+  ]
+))
+
+$xorProblem = ea.p.simToTo(
+  name = "xor";
+  simulation = ds.s.sequentialXor(
+    cases = $casesXor;
+    rewardType = unlimited;
+    resetAgent = true;
+    shuffle = true
+  );
+  dT = 1;
+  tRange = $tRangeXor;
+  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
+  qFunction = $qFunctions
+)
+
+$parityProblem = ea.p.simToTo(
+  name = "parity";
+  simulation = ds.s.sequentialBf(
+    cases = $casesParity5;
+    target = ea.misc.evenParityBf(n = 5);
+    rewardType = unlimited;
+    resetAgent = true
+  );
+  dT = 1;
+  tRange = $tRangeParity5;
+  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
+  qFunction = $qFunctions
+)
+
+$mopmProblem = ea.p.simToTo(
+  name = "mopm";
+  simulation = ds.s.sequentialBf(
+    cases = $casesMopm3;
+    target = ea.misc.mopmBf(n = 3);
+    rewardType = unlimited;
+    resetAgent = true
+  );
+  dT = 1;
+  tRange = $tRangeMopm3;
+  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
+  qFunction = $qFunctions
+)

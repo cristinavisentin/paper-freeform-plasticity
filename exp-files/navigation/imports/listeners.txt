@@ -1,0 +1,74 @@
+$basePath = ''./results/{^^.name}/{^^.startTime}/''
+$imgType = svg
+
+$testEnviroment = (arena = $testArenas)
+* [ds.e.navigation(randomGenerator = m.sharedRG())]
+
+$console = ea.l.console(
+  eFunctions = [
+    ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%4d");
+    f.mapValue(key = maturePerformance; of = ea.f.quality(of = ea.f.best()); format = "%6.4f")
+  ];
+  onlyLast = true
+)
+
+$consoleCSV = ea.l.csv(
+  path = $basePath + "console.csv";
+  eFunctions = [
+    ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%4d");
+    f.mapValue(key = maturePerformance; of = ea.f.quality(of = ea.f.best()); format = "%6.4f");
+    f.mapValue(key = increase; of = ea.f.quality(of = ea.f.best()); format = "%6.4f");
+    f.mapValue(key = inconsistency; of = ea.f.quality(of = ea.f.best()); format = "%6.4f")
+  ]
+)
+
+$maturePerformance = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "maturePerformance." + $imgType;
+  plot = ea.plot.multi.quality(
+    q = f.mapValue(key = maturePerformance)
+  );
+  overwrite = true;
+  type = $imgType
+)
+
+$increase = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "increase." + $imgType;
+  plot = ea.plot.multi.quality(
+    q = f.mapValue(key = increase)
+  );
+  overwrite = true;
+  type = $imgType
+)
+
+$inconsistency = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "inconsistency." + $imgType;
+  plot = ea.plot.multi.quality(
+    q = f.mapValue(key = inconsistency)
+  );
+  overwrite = true;
+  type = $imgType
+)
+
+$archives = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "/{solver.name}/me-archives-{randomGenerator.seed:%02d}." + $imgType;
+  plot = ea.plot.single.me(values = [
+    f.mapValue(key = maturePerformance; of = ea.f.quality())
+  ]);
+  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
+  type = $imgType
+)
+
+$frozenTrajs = ea.l.saveForRun(
+  path = $basePath + "{solver.name}/best-frozen-trajs-{randomGenerator.seed:%02d}." + $imgType;
+  of = ea.acc.lastBest();
+  processor = viz.f.toMultiImage(
+    drawer = ds.d.navigation();
+    of = f.all(
+      of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution()));
+      fs = (simulation = (environment = $testEnviroment)
+      * [ds.sat.fromEnvironment()])
+      * [ds.f.simulate(dT = $dT; tRange = $tRange)]
+    );
+    type = $imgType
+  )
+)

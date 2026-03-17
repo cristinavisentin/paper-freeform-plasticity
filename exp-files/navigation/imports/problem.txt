@@ -1,0 +1,36 @@
+$trainEnviroment = (arena = $trainArenas)
+* [ds.e.navigation(randomGenerator = m.sharedRG())]
+
+$qFunctions = f.allNamed(
+  fs = m.sKeyMap(
+    keys = [maturePerformance; increase; inconsistency];
+    values = [
+      f.avg(of = f.subList(from = 45; to = 50; relative = false));
+      ea.f.numExpr(
+        expr = "-(x2;x1)";
+        args = [
+          f.avg(of = f.subList(from = 0; to = 5; relative = false));
+          f.avg(of = f.subList(from = 45; to = 50; relative = false))
+        ]
+      );
+      f.sd(of = f.subList(from = 45; to = 50; relative = false))
+    ]
+  );
+  of = f.each(mapF = ds.f.cumulatedReward())
+)
+
+$simToTo = ea.p.simToTo(
+  dT = $dT;
+  tRange = $tRange;
+  qFunction = f.identity();
+  comparator = ea.comparator.descending(of = ds.f.cumulatedReward())
+)
+
+$problem = ea.p.manyToCbto(
+  name = "train";
+  problems = (simulation = (environment = $trainEnviroment)
+    * [ds.srlat.fromNumericalEnvironment(reward = ds.e.nav.reward.reaching())])
+    * [$simToTo];
+  aggregator = $qFunctions;
+  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance))
+)

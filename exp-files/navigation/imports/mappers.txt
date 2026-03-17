@@ -1,0 +1,42 @@
+$weightsUpdateInterval = 10
+$initialWeightRange = m.range(min = -0.02; max = 0.02)
+
+$hebbianNetworkMapper = ea.mapper.ndsToNrla(of = ea.mapper.dsToParametrized(parametrized = ds.num.hebbianMlp(
+  innerLayers = $innerLayers; 
+  parametrizationType = network; 
+  weightInitializationType = random; 
+  weightsUpdateInterval = $weightsUpdateInterval; 
+  initialWeightRange = $initialWeightRange;
+  maxWeightMagnitude = 10
+)))
+$hebbianLayerMapper = ea.mapper.ndsToNrla(of = ea.mapper.dsToParametrized(parametrized = ds.num.hebbianMlp(
+  innerLayers = $innerLayers; 
+  parametrizationType = layer; 
+  weightInitializationType = random; 
+  weightsUpdateInterval = $weightsUpdateInterval; 
+  initialWeightRange = $initialWeightRange;
+  maxWeightMagnitude = 10
+)))
+$hebbianNeuronMapper = ea.mapper.ndsToNrla(of = ea.mapper.dsToParametrized(parametrized = ds.num.hebbianMlp(
+  innerLayers = $innerLayers; 
+  parametrizationType = neuron; 
+  weightInitializationType = random; 
+  weightsUpdateInterval = $weightsUpdateInterval; 
+  initialWeightRange = $initialWeightRange;
+  maxWeightMagnitude = 10
+)))
+$hebbianSynapseMapper = ea.mapper.ndsToNrla(of = ea.mapper.dsToParametrized(parametrized = ds.num.hebbianMlp(
+  innerLayers = $innerLayers; 
+  parametrizationType = synapse; 
+  weightInitializationType = random; 
+  weightsUpdateInterval = $weightsUpdateInterval; 
+  initialWeightRange = $initialWeightRange;
+  maxWeightMagnitude = 10
+)))
+$freeFormMapper = ea.mapper.parametrized(of = ea.mapper.srTreeToNurf(); parametrized = ds.rl.num.freeFormMlp(
+  innerLayers = $innerLayers; 
+  weightInitializationType = random; 
+  weightsUpdateInterval = $weightsUpdateInterval; 
+  initialWeightRange = $initialWeightRange;
+  maxWeightMagnitude = 10
+))

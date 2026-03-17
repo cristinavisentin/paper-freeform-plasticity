@@ -1,0 +1,72 @@
+% REQUIRED CMD-LINE PARAMS: $seeds, $nOfEvals, $innerLayers
+
+$dT = 0.1
+$tRange = m.range(min = 0; max = 60)
+
+@import("imports/arenas.txt")
+@import("imports/problem.txt")
+@import("imports/mappers.txt")
+@import("imports/listeners.txt")
+
+$dIncrease = ea.s.me.d.descriptor(
+  f = f.mapValue(key = increase; of = ea.f.quality()); 
+  min = 0.0; 
+  max = 500.0; 
+  nOfBins = 10
+)
+$dInconsistency = ea.s.me.d.descriptor(
+  f = f.mapValue(key = inconsistency; of = ea.f.quality()); 
+  min = 0.0; 
+  max = 200.0; 
+  nOfBins = 10
+)
+
+ea.experiment(
+  runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()])
+  * (problem = $problem)
+  * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) * [
+    ea.s.mapElites(
+      name = "me-hebbian-network";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianNetworkMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-hebbian-layer";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianLayerMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-hebbian-neuron";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianNeuronMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-hebbian-synapse";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianSynapseMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-freeForm";
+      representation = ea.r.srTree(
+        ephemeral = true;
+        operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary]
+      );
+      mapper = $freeFormMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    )
+  ])
+  * [ea.run()];
+  listeners = [
+    $console;
+    $consoleCSV;
+    $fitness;
+    $increase;
+    $inconsistency;
+    $archives;
+    $frozenTrajs
+  ]
+)

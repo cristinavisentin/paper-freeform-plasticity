@@ -1,0 +1,139 @@
+$basePath = ''./results/{^^.name}/{^^.startTime}/''
+$imgType = svg
+
+$console = ea.l.console(
+  eFunctions = [
+    ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%4d");
+    f.mapValue(key = maturePerformance; of = ea.f.quality(of = ea.f.best()); format = "%6.4f")
+  ];
+  kFunctions = [
+    f.replaceAll(of = f.interpolated(name = numberOfInnerLayers; s = "{solver.mapper.of.parametrized.innerLayers}{solver.mapper.parametrized.innerLayers}"); regex="null")
+  ];
+  onlyLast = true
+)
+
+$consoleCSV = ea.l.csv(
+  path = $basePath + "console.csv";
+  eFunctions = [
+    ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%4d");
+    f.mapValue(key = maturePerformance; of = ea.f.quality(of = ea.f.best()); format = "%6.4f");
+    f.mapValue(key = increase; of = ea.f.quality(of = ea.f.best()); format = "%6.4f");
+    f.mapValue(key = inconsistency; of = ea.f.quality(of = ea.f.best()); format = "%6.4f")
+  ];
+  kFunctions = [
+    f.replaceAll(of = f.interpolated(name = numberOfInnerLayers; s = "{solver.mapper.of.parametrized.innerLayers}{solver.mapper.parametrized.innerLayers}"); regex="null")
+  ]
+)
+
+$maturePerformance = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "maturePerformance." + $imgType;
+  plot = ea.plot.multi.quality(
+    q = f.mapValue(key = maturePerformance)
+  );
+  type = $imgType
+)
+
+$increase = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "increase." + $imgType;
+  plot = ea.plot.multi.quality(
+    q = f.mapValue(key = increase)
+  );
+  type = $imgType
+)
+
+$inconsistency = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "inconsistency." + $imgType;
+  plot = ea.plot.multi.quality(
+    q = f.mapValue(key = inconsistency)
+  );
+  type = $imgType
+)
+
+$frozenScore = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "frozenScore." + $imgType;
+  plot = ea.plot.multi.xyExp(
+    y = ds.e.sBool.avgScore(
+      scoreType = unlimited;
+      caseIndexes = [0:1:3];
+      of = ds.f.simulate(
+        of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution(of = ea.f.best()))));
+        dT = 1;
+        tRange = $tRangeFrozenXor;
+        simulation = ds.s.sequentialXor(
+          cases = $testCasesXor;
+          resetAgent = true;
+          shuffle = true
+        )
+      )
+    )
+  );
+  type = $imgType
+)
+
+$stateTraj = ea.l.saveForRun(
+  path = $basePath + "/{solver.name}/{problem.name}/best-state-{randomGenerator.seed:%02d}." + $imgType;
+  of = ea.acc.lastBest();
+  processor = viz.f.toImage(
+    drawer = ds.d.vectorialTrajectory();
+    of = ds.f.agentStateTrajectory(
+      of = ea.f.solution();
+      stateF = ds.f.params();
+      sat = ds.s.sequentialXor(
+        cases = $casesXor;
+        resetAgent = true;
+        shuffle = true
+      );
+      dT = 1;
+      tRange = $tRangeXor
+    );
+    type = $imgType
+  )
+)
+
+$archivesP = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "/{solver.name}/{problem.name}/me-archives-{randomGenerator.seed:%02d}." + $imgType;
+  plot = ea.plot.single.me(values = [
+    f.mapValue(key = maturePerformance; of = ea.f.quality());
+    ds.e.sBool.avgScore(
+      scoreType = unlimited;
+      caseIndexes = [0:1:3];
+      of = ds.f.simulate(
+        of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution())));
+        dT = 1;
+        tRange = $tRangeFrozenXor;
+        simulation = ds.s.sequentialXor(
+          cases = $testCasesXor;
+          resetAgent = true;
+          shuffle = true
+        )
+      )
+    )
+  ]);
+  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
+  type = $imgType
+)
+
+$srTree = ea.l.saveForRun(
+  path = $basePath + "/{solver.name}/{problem.name}/best-tree-{randomGenerator.seed:%02d}." + $imgType;
+  of = ea.acc.lastBest();
+  processor = viz.f.toImage(
+    drawer = viz.d.stacked(drawers = [
+      ea.d.tree(scale = 3);
+      ea.d.formula(scale = 3);
+      ea.d.formula(scale = 3; simplify = true)
+    ]);
+    of = ea.f.genotype();
+    type = $imgType
+  );
+  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = ".*freeForm.*")
+)
+
+$bestBehavior = ea.l.saveForRun(
+  path = $basePath + "/{solver.name}/{problem.name}/best-behavior-{randomGenerator.seed:%02d}." + $imgType;
+  of = ea.acc.lastBest();
+  processor = viz.f.toImage(
+    drawer = ds.d.sequentialBf(scoreTypes = [boolean; limited]);
+    of = f.mapValue(key = behavior; of = ea.f.quality());
+    type = $imgType
+  )
+)
