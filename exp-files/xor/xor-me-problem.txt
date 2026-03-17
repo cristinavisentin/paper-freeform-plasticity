@@ -68,6 +68,7 @@ ea.experiment(
     $increase;
     $inconsistency; 
     $frozenScore;
+    $stateTraj;
     $archivesP
   ]
 )

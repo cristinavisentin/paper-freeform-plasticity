@@ -71,7 +71,7 @@ $frozenScore = ea.l.savePlotAndCsvForExp(
 )
 
 $stateTraj = ea.l.saveForRun(
-  path = $basePath + "/{solver.name}/{problem.name}/best-state-{randomGenerator.seed:%02d}." + $imgType;
+  path = $basePath + "/{solver.name}/stateTajectories/best-state-{randomGenerator.seed:%02d}." + $imgType;
   of = ea.acc.lastBest();
   processor = viz.f.toImage(
     drawer = ds.d.vectorialTrajectory();
@@ -91,7 +91,7 @@ $stateTraj = ea.l.saveForRun(
 )
 
 $archivesP = ea.l.savePlotAndCsvForRun(
-  path = $basePath + "/{solver.name}/{problem.name}/me-archives-{randomGenerator.seed:%02d}." + $imgType;
+  path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
   plot = ea.plot.single.me(values = [
     f.mapValue(key = maturePerformance; of = ea.f.quality());
     ds.e.sBool.avgScore(
@@ -111,29 +111,4 @@ $archivesP = ea.l.savePlotAndCsvForRun(
   ]);
   kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
   type = $imgType
-)
-
-$srTree = ea.l.saveForRun(
-  path = $basePath + "/{solver.name}/{problem.name}/best-tree-{randomGenerator.seed:%02d}." + $imgType;
-  of = ea.acc.lastBest();
-  processor = viz.f.toImage(
-    drawer = viz.d.stacked(drawers = [
-      ea.d.tree(scale = 3);
-      ea.d.formula(scale = 3);
-      ea.d.formula(scale = 3; simplify = true)
-    ]);
-    of = ea.f.genotype();
-    type = $imgType
-  );
-  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = ".*freeForm.*")
-)
-
-$bestBehavior = ea.l.saveForRun(
-  path = $basePath + "/{solver.name}/{problem.name}/best-behavior-{randomGenerator.seed:%02d}." + $imgType;
-  of = ea.acc.lastBest();
-  processor = viz.f.toImage(
-    drawer = ds.d.sequentialBf(scoreTypes = [boolean; limited]);
-    of = f.mapValue(key = behavior; of = ea.f.quality());
-    type = $imgType
-  )
 )

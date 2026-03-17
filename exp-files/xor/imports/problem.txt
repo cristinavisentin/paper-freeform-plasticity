@@ -7,9 +7,8 @@ $firstIndexesParity5 = [0:1:95]     % last 96 (=10%)
 $firstIndexesMopm3 = [0:1:191]      % last 192 (=10%)
 
 $qFunctions = f.allNamed(fs = m.sKeyMap(
-  keys = [behavior; maturePerformance; increase; inconsistency];
+  keys = [maturePerformance; increase; inconsistency];
   values = [
-    f.identity();
     ds.e.sBool.avgScore(
       scoreType = boolean;
       caseIndexes = $lastIndexesXor
@@ -27,25 +26,26 @@ $qFunctions = f.allNamed(fs = m.sKeyMap(
         )
       ]
     );
-    ds.e.sBool.sdtDevScore(
+    ds.e.sBool.sdScore(
       scoreType = unlimited;
       indexes = $lastIndexesXor
     )
   ]
 ))
 
-$xorProblem = ea.p.simToTo(
+$xorProblem = ea.p.simsToTo(
   name = "xor";
-  simulation = ds.s.sequentialXor(
+  simulations = 5 * [ds.s.sequentialXor(
     cases = $casesXor;
     rewardType = unlimited;
     resetAgent = true;
     shuffle = true
-  );
+  )];
   dT = 1;
   tRange = $tRangeXor;
   comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
-  qFunction = $qFunctions
+  qFunction = $qFunctions;
+  aggregator = f.mapAggregate(aggregateF = f.avg())
 )
 
 $parityProblem = ea.p.simToTo(
