@@ -50,7 +50,7 @@ $inconsistency = ea.l.savePlotAndCsvForRun(
 )
 
 $archives = ea.l.savePlotAndCsvForRun(
-  path = $basePath + "/{solver.name}/me-archives-{randomGenerator.seed:%02d}." + $imgType;
+  path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
   plot = ea.plot.single.me(values = [
     f.mapValue(key = maturePerformance; of = ea.f.quality())
   ]);
@@ -59,7 +59,7 @@ $archives = ea.l.savePlotAndCsvForRun(
 )
 
 $frozenTrajs = ea.l.saveForRun(
-  path = $basePath + "{solver.name}/best-frozen-trajs-{randomGenerator.seed:%02d}." + $imgType;
+  path = $basePath + "{solver.name}/frozenTrajectories/best-frozen-trajs-{randomGenerator.seed:%02d}." + $imgType;
   of = ea.acc.lastBest();
   processor = viz.f.toMultiImage(
     drawer = ds.d.navigation();

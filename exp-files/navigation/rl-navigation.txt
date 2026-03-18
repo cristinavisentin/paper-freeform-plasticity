@@ -63,7 +63,7 @@ ea.experiment(
   listeners = [
     $console;
     $consoleCSV;
-    $fitness;
+    $maturePerformance;
     $increase;
     $inconsistency;
     $archives;
