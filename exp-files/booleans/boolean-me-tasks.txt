@@ -3,7 +3,7 @@
 @import("imports/cases.txt")
 @import("imports/problem.txt")
 @import("imports/listeners.txt")
-@import("imports/mappers.txt")
+@import("../import/mappers.txt")
 
 $dIncrease = ea.s.me.d.descriptor(
   f = f.mapValue(key = increase; of = ea.f.quality()); 

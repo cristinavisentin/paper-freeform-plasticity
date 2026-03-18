@@ -1,13 +1,13 @@
 $basePath = ''./results/{^^.name}/{^^.startTime}/''
 $imgType = svg
 
-$testEnviroment = (arena = $testArenas)
-* [ds.e.navigation(randomGenerator = m.sharedRG())]
-
 $console = ea.l.console(
   eFunctions = [
     ea.f.size(of = ea.f.genotype(of = ea.f.best()); format = "%4d");
     f.mapValue(key = maturePerformance; of = ea.f.quality(of = ea.f.best()); format = "%6.4f")
+  ];
+  kFunctions = [
+    f.replaceAll(of = f.interpolated(name = numberOfInnerLayers; s = "{solver.mapper.of.parametrized.innerLayers}{solver.mapper.parametrized.innerLayers}"); regex="null")
   ];
   onlyLast = true
 )
@@ -19,6 +19,9 @@ $consoleCSV = ea.l.csv(
     f.mapValue(key = maturePerformance; of = ea.f.quality(of = ea.f.best()); format = "%6.4f");
     f.mapValue(key = increase; of = ea.f.quality(of = ea.f.best()); format = "%6.4f");
     f.mapValue(key = inconsistency; of = ea.f.quality(of = ea.f.best()); format = "%6.4f")
+  ];
+  kFunctions = [
+    f.replaceAll(of = f.interpolated(name = numberOfInnerLayers; s = "{solver.mapper.of.parametrized.innerLayers}{solver.mapper.parametrized.innerLayers}"); regex="null")
   ]
 )
 
@@ -49,15 +52,6 @@ $inconsistency = ea.l.savePlotAndCsvForRun(
   type = $imgType
 )
 
-$archives = ea.l.savePlotAndCsvForRun(
-  path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
-  plot = ea.plot.single.me(values = [
-    f.mapValue(key = maturePerformance; of = ea.f.quality())
-  ]);
-  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
-  type = $imgType
-)
-
 $frozenTrajs = ea.l.saveForRun(
   path = $basePath + "{solver.name}/frozenTrajectories/best-frozen-trajs-{randomGenerator.seed:%02d}." + $imgType;
   of = ea.acc.lastBest();
@@ -71,4 +65,13 @@ $frozenTrajs = ea.l.saveForRun(
     );
     type = $imgType
   )
+)
+
+$archives = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
+  plot = ea.plot.single.me(values = [
+    f.mapValue(key = maturePerformance; of = ea.f.quality())
+  ]);
+  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
+  type = $imgType
 )

@@ -1,6 +1,9 @@
 $trainEnviroment = (arena = $trainArenas)
 * [ds.e.navigation(randomGenerator = m.sharedRG())]
 
+$testEnviroment = (arena = $testArenas)
+* [ds.e.navigation(randomGenerator = m.sharedRG())]
+
 $qFunctions = f.allNamed(
   fs = m.sKeyMap(
     keys = [maturePerformance; increase; inconsistency];

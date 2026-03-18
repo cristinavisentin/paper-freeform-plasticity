@@ -5,7 +5,7 @@ $tRange = m.range(min = 0; max = 60)
 
 @import("imports/arenas.txt")
 @import("imports/problem.txt")
-@import("imports/mappers.txt")
+@import("../import/mappers.txt")
 @import("imports/listeners.txt")
 
 $dIncrease = ea.s.me.d.descriptor(
