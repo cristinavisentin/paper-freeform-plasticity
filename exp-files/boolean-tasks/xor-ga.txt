@@ -1,0 +1,56 @@
+% REQUIRED CMD-LINE PARAMS: $seeds, $nOfEvals, $innerLayers
+
+@import("imports/cases.txt")
+@import("imports/problems.txt")
+@import("imports/listeners.txt")
+@import("../import/mappers.txt")
+
+ea.experiment(
+  runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()])
+  * (problem = $xorProblem)
+  * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) * [
+    ea.s.ga(
+      name = "hebbian-network";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianNetworkMapper;
+      remap = false
+    );
+    ea.s.ga(
+      name = "hebbian-layer";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianLayerMapper;
+      remap = false
+    );
+    ea.s.ga(
+      name = "hebbian-neuron";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianNeuronMapper;
+      remap = false
+    );
+    ea.s.ga(
+      name = "hebbian-synapse";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianSynapseMapper;
+      remap = false
+    );
+    ea.s.ga(
+      name = "freeForm";
+      representation = ea.r.srTree(
+        ephemeral = true;
+        operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary]
+      );
+      mapper = $freeFormMapper;
+      remap = false
+    )
+  ])
+  * [ea.run()];
+  listeners = [
+    $console;
+    $consoleCSV;
+    $maturePerformance;
+    $increase;
+    $inconsistency; 
+    $frozenScore;
+    $stateTraj
+  ]
+)

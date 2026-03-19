@@ -1,7 +1,7 @@
 % REQUIRED CMD-LINE PARAMS: $seeds, $nOfEvals, $innerLayers
 
 @import("imports/cases.txt")
-@import("imports/problem.txt")
+@import("imports/problems.txt")
 @import("imports/listeners.txt")
 @import("../import/mappers.txt")
 
@@ -18,13 +18,9 @@ $dInconsistency = ea.s.me.d.descriptor(
   nOfBins = 10
 )
 
-$problem = $xorProblem
-%$problem = $parityProblem
-%$problem = $mopmProblem
-
 ea.experiment(
   runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()])
-  * (problem = $problem)
+  * (problem = $xorProblem)
   * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) * [
     ea.s.mapElites(
       name = "me-hebbian-network";
@@ -55,6 +51,11 @@ ea.experiment(
       representation = ea.r.srTree(
         ephemeral = true;
         operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary]
+        %operators = [addition; subtraction; multiplication];
+        %includeVarNameRegex = "current_neuronPost_activation|current_neuronPre_activation"
+        %includeVarNameRegex = "current_neuronPost_activation|current_neuronPre_activation|preSynapticNeuronIdx|postSynapticNeuronIdx|layerIdx"
+        %excludeVarNameRegex = "current_reward|average_reward|stdDev_reward|trend_reward"
+        %excludeVarNameRegex = "age"
       );
       mapper = $freeFormMapper;
       descriptors = [$dIncrease; $dInconsistency]

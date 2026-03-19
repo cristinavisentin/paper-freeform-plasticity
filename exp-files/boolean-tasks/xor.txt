@@ -1,0 +1,70 @@
+% REQUIRED CMD-LINE PARAMS: $seeds, $nOfEvals, $innerLayers
+
+@import("imports/cases.txt")
+@import("imports/problems.txt")
+@import("imports/listeners.txt")
+@import("../import/mappers.txt")
+
+$dIncrease = ea.s.me.d.descriptor(
+  f = f.mapValue(key = increase; of = ea.f.quality()); 
+  min = 0.0; 
+  max = 1.0; 
+  nOfBins = 10
+)
+$dInconsistency = ea.s.me.d.descriptor(
+  f = f.mapValue(key = inconsistency; of = ea.f.quality()); 
+  min = 0.0; 
+  max = 0.2; 
+  nOfBins = 10
+)
+
+ea.experiment(
+  runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()])
+  * (problem = $xorProblem)
+  * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) * [
+    ea.s.mapElites(
+      name = "me-hebbian-network";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianNetworkMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-hebbian-layer";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianLayerMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-hebbian-neuron";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianNeuronMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-hebbian-synapse";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianSynapseMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-freeForm";
+      representation = ea.r.srTree(
+        ephemeral = true;
+        operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary]
+      );
+      mapper = $freeFormMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    )
+  ])
+  * [ea.run()];
+  listeners = [
+    $console;
+    $consoleCSV;
+    $maturePerformance;
+    $increase;
+    $inconsistency; 
+    $frozenScore;
+    $stateTraj;
+    $archivesP
+  ]
+)
