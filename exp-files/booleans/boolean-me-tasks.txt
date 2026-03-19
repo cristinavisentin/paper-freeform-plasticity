@@ -56,7 +56,7 @@ ea.experiment(
         ephemeral = true;
         %operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary];
         operators = [addition; subtraction; multiplication];
-        includeVarNameRegex = "current_neuronPost_activation|current_neuronPre_activation"
+        includeVarNameRegex = "current_neuronPost_activation|current_neuronPre_activation|preSynapticNeuronIdx|postSynapticNeuronIdx|layerIdx"
       );
       mapper = $freeFormMapper;
       descriptors = [$dIncrease; $dInconsistency]
