@@ -71,23 +71,28 @@ $frozenScore = ea.l.savePlotAndCsvForExp(
 )
 
 $stateTraj = ea.l.saveForRun(
-  path = $basePath + "/{solver.name}/stateTajectories/best-state-{randomGenerator.seed:%02d}." + $imgType;
   of = ea.acc.lastBest();
-  processor = viz.f.toImage(
-    drawer = ds.d.vectorialTrajectory();
-    of = ds.f.agentStateTrajectory(
-      of = ea.f.solution();
-      stateF = ds.f.params();
-      sat = ds.s.sequentialXor(
-        cases = $casesXor;
-        resetAgent = true;
-        shuffle = true
-      );
-      dT = 1;
-      tRange = $tRangeXor
+  processor = ds.f.agentStateTrajectory(
+    of = ea.f.solution();
+    stateF = ds.f.params();
+    sat = ds.s.sequentialXor(
+      cases = $casesXor;
+      resetAgent = true;
+      shuffle = true
     );
-    type = $imgType
-  )
+    dT = 1;
+    tRange = $tRangeXor
+  );
+  consumers = [
+    consumer.saver(
+      path = $basePath + "/{solver.name}/stateTajectories/best-state-{randomGenerator.seed:%02d}." + $imgType;
+      of = viz.f.toImage(drawer = ds.d.vectorialTrajectory(); type = $imgType)
+    );
+    consumer.saver(
+      path = $basePath + "/{solver.name}/stateTajectories/best-state-{randomGenerator.seed:%02d}.tsv";
+      of = f.tdaMapToTable()
+    )
+  ]
 )
 
 $archivesP = ea.l.savePlotAndCsvForRun(
