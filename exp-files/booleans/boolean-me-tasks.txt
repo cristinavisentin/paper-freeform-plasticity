@@ -54,7 +54,8 @@ ea.experiment(
       name = "me-freeForm";
       representation = ea.r.srTree(
         ephemeral = true;
-        operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary]
+        operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary];
+        excludeVarNameRegex = "current_reward|average_reward|stdDev_reward|trend_reward"
       );
       mapper = $freeFormMapper;
       descriptors = [$dIncrease; $dInconsistency]
