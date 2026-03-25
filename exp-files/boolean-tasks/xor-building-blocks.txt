@@ -85,7 +85,7 @@ ea.experiment(
     $maturePerformance;
     $increase;
     $inconsistency; 
-    $xorFrozenScore;
+    $xorFrozenPerformance;
     $stateTrajXor;
     $archivesXor
   ]
