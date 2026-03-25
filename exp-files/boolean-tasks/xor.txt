@@ -63,8 +63,16 @@ ea.experiment(
     $maturePerformance;
     $increase;
     $inconsistency; 
-    $xorFrozenScore;
+    $orReset;
+    $orNoReset;
     $stateTrajXor;
-    $archivesXor
+    $stateTrajCopyNoReset;
+    $stateTrajCopyReset;
+    $xorFrozenPerformance;
+    $archivesXor;
+    $bestBehaviorCopyNoReset;
+    $bestBehaviorCopyReset;
+    $bestBehaviorOrNoReset;
+    $bestBehaviorOrReset
   ]
 )
