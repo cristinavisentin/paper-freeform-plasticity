@@ -1,0 +1,92 @@
+% REQUIRED CMD-LINE PARAMS: $seeds, $nOfEvals, $innerLayers
+
+@import("imports/cases.txt")
+@import("imports/problems.txt")
+@import("imports/listeners.txt")
+@import("../import/mappers.txt")
+
+$dIncrease = ea.s.me.d.descriptor(
+  f = f.mapValue(key = increase; of = ea.f.quality()); 
+  min = 0.0; 
+  max = 1.0; 
+  nOfBins = 10
+)
+$dInconsistency = ea.s.me.d.descriptor(
+  f = f.mapValue(key = inconsistency; of = ea.f.quality()); 
+  min = 0.0; 
+  max = 0.2; 
+  nOfBins = 10
+)
+
+ea.experiment(
+  runs = (randomGenerator = (seed = $seeds) * [m.defaultRG()])
+  * (problem = $xorProblem)
+  * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) * [
+    ea.s.mapElites(
+      name = "me-hebbian-neuron";
+      representation = ea.representation.doubleString();
+      mapper = $hebbianNeuronMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-freeForm-full";
+      representation = ea.r.srTree(
+        ephemeral = true;
+        operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary]
+      );
+      mapper = $freeFormMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-freeForm-no-age";
+      representation = ea.r.srTree(
+        ephemeral = true;
+        operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary];
+        excludeVarNameRegex = "age"
+      );
+      mapper = $freeFormMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-freeForm-no-reward";
+      representation = ea.r.srTree(
+        ephemeral = true;
+        operators = [addition; subtraction; multiplication; prot_division; prot_log; max; min; tanh; gt; lt; ternary];
+        excludeVarNameRegex = "current_reward|average_reward|stdDev_reward|trend_reward"
+      );
+      mapper = $freeFormMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-freeForm-synapse";
+      representation = ea.r.srTree(
+        ephemeral = true;
+        operators = [addition; subtraction; multiplication];
+        includeVarNameRegex = "current_neuronPost_activation|current_neuronPre_activation|preSynapticNeuronIdx|postSynapticNeuronIdx|layerIdx"
+      );
+      mapper = $freeFormMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    );
+    ea.s.mapElites(
+      name = "me-freeForm-network";
+      representation = ea.r.srTree(
+        ephemeral = true;
+        operators = [addition; subtraction; multiplication];
+        includeVarNameRegex = "current_neuronPost_activation|current_neuronPre_activation"
+      );
+      mapper = $freeFormMapper;
+      descriptors = [$dIncrease; $dInconsistency]
+    )
+  ])
+  * [ea.run()];
+  listeners = [
+    $console;
+    $consoleCSV;
+    $maturePerformance;
+    $increase;
+    $inconsistency; 
+    $frozenScore;
+    $stateTraj;
+    $archivesP
+  ]
+)
