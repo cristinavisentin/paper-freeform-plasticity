@@ -63,7 +63,7 @@ ea.experiment(
     $maturePerformance;
     $increase;
     $inconsistency; 
-    $parityfrozenScore;
+    $parityFrozenPerformance;
     $stateTrajParity;
     $archivesParity
   ]

@@ -63,7 +63,7 @@ ea.experiment(
     $maturePerformance;
     $increase;
     $inconsistency; 
-    $mopmFrozenScore;
+    $mopmFrozenPerformance;
     $stateTrajMopm;
     $archivesMopm
   ]

@@ -28,16 +28,17 @@ $qFunctions = f.allNamed(fs = m.sKeyMap(
   ]
 ))
 
-$parityProblem = ea.p.simToTo(
+$parityProblem = ea.p.simsToTo(
   name = "parity";
-  simulation = ds.s.sequentialBf(
+  simulations = 5 * [ds.s.sequentialBf(
     cases = $casesParity5;
     target = ea.misc.evenParityBf(n = 5);
     rewardType = unlimited;
     resetAgent = true
-  );
+  )];
   dT = 1;
   tRange = $tRangeParity5;
   comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
-  qFunction = $qFunctions
+  qFunction = $qFunctions;
+  aggregator = f.mapAggregate(aggregateF = f.avg())
 )
