@@ -49,7 +49,7 @@ $inconsistency = ea.l.savePlotAndCsvForExp(
   type = $imgType
 )
 
-$frozenScore = ea.l.savePlotAndCsvForExp(
+$xorFrozenScore = ea.l.savePlotAndCsvForExp(
   path = $basePath + "frozenScore." + $imgType;
   plot = ea.plot.multi.xyExp(
     y = ds.e.sBool.avgScore(
@@ -70,7 +70,49 @@ $frozenScore = ea.l.savePlotAndCsvForExp(
   type = $imgType
 )
 
-$stateTraj = ea.l.saveForRun(
+$parityFrozenScore = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "frozenScore." + $imgType;
+  plot = ea.plot.multi.xyExp(
+    y = ds.e.sBool.avgScore(
+      scoreType = unlimited;
+      caseIndexes = [0:1:31];
+      of = ds.f.simulate(
+        of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution(of = ea.f.best()))));
+        dT = 1;
+        tRange = $tRangeFrozenParity5;
+        simulation = ds.s.sequentialXor(
+          cases = $testCasesParity5;
+          resetAgent = true;
+          shuffle = true
+        )
+      )
+    )
+  );
+  type = $imgType
+)
+
+$mopmFrozenScore = ea.l.savePlotAndCsvForExp(
+  path = $basePath + "frozenScore." + $imgType;
+  plot = ea.plot.multi.xyExp(
+    y = ds.e.sBool.avgScore(
+      scoreType = unlimited;
+      caseIndexes = [0:1:63];
+      of = ds.f.simulate(
+        of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution(of = ea.f.best()))));
+        dT = 1;
+        tRange = $tRangeFrozenMopm3;
+        simulation = ds.s.sequentialXor(
+          cases = $testCasesMopm3;
+          resetAgent = true;
+          shuffle = true
+        )
+      )
+    )
+  );
+  type = $imgType
+)
+
+$stateTrajXor = ea.l.saveForRun(
   of = ea.acc.lastBest();
   processor = ds.f.agentStateTrajectory(
     of = ea.f.solution();
@@ -95,7 +137,57 @@ $stateTraj = ea.l.saveForRun(
   ]
 )
 
-$archivesP = ea.l.savePlotAndCsvForRun(
+$stateTrajParity = ea.l.saveForRun(
+  of = ea.acc.lastBest();
+  processor = ds.f.agentStateTrajectory(
+    of = ea.f.solution();
+    stateF = ds.f.params();
+    sat = ds.s.sequentialXor(
+      cases = $casesParity5;
+      resetAgent = true;
+      shuffle = true
+    );
+    dT = 1;
+    tRange = $tRangeParity5
+  );
+  consumers = [
+    consumer.saver(
+      path = $basePath + "/{solver.name}/stateTajectories/best-state-{randomGenerator.seed:%02d}." + $imgType;
+      of = viz.f.toImage(drawer = ds.d.vectorialTrajectory(); type = $imgType)
+    );
+    consumer.saver(
+      path = $basePath + "/{solver.name}/stateTajectories/best-state-{randomGenerator.seed:%02d}.tsv";
+      of = f.tdaMapToTable()
+    )
+  ]
+)
+
+$stateTrajMopm = ea.l.saveForRun(
+  of = ea.acc.lastBest();
+  processor = ds.f.agentStateTrajectory(
+    of = ea.f.solution();
+    stateF = ds.f.params();
+    sat = ds.s.sequentialXor(
+      cases = $casesMopm3;
+      resetAgent = true;
+      shuffle = true
+    );
+    dT = 1;
+    tRange = $tRangeMopm3
+  );
+  consumers = [
+    consumer.saver(
+      path = $basePath + "/{solver.name}/stateTajectories/best-state-{randomGenerator.seed:%02d}." + $imgType;
+      of = viz.f.toImage(drawer = ds.d.vectorialTrajectory(); type = $imgType)
+    );
+    consumer.saver(
+      path = $basePath + "/{solver.name}/stateTajectories/best-state-{randomGenerator.seed:%02d}.tsv";
+      of = f.tdaMapToTable()
+    )
+  ]
+)
+
+$archivesXor = ea.l.savePlotAndCsvForRun(
   path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
   plot = ea.plot.single.me(values = [
     f.mapValue(key = maturePerformance; of = ea.f.quality());
@@ -108,6 +200,52 @@ $archivesP = ea.l.savePlotAndCsvForRun(
         tRange = $tRangeFrozenXor;
         simulation = ds.s.sequentialXor(
           cases = $testCasesXor;
+          resetAgent = true;
+          shuffle = true
+        )
+      )
+    )
+  ]);
+  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
+  type = $imgType
+)
+
+$archivesParity = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
+  plot = ea.plot.single.me(values = [
+    f.mapValue(key = maturePerformance; of = ea.f.quality());
+    ds.e.sBool.avgScore(
+      scoreType = unlimited;
+      caseIndexes = [0:1:31];
+      of = ds.f.simulate(
+        of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution())));
+        dT = 1;
+        tRange = $tRangeFrozenParity5;
+        simulation = ds.s.sequentialXor(
+          cases = $testCasesParity5;
+          resetAgent = true;
+          shuffle = true
+        )
+      )
+    )
+  ]);
+  kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
+  type = $imgType
+)
+
+$archivesMopm = ea.l.savePlotAndCsvForRun(
+  path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
+  plot = ea.plot.single.me(values = [
+    f.mapValue(key = maturePerformance; of = ea.f.quality());
+    ds.e.sBool.avgScore(
+      scoreType = unlimited;
+      caseIndexes = [0:1:63];
+      of = ds.f.simulate(
+        of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution())));
+        dT = 1;
+        tRange = $tRangeFrozenMopm3;
+        simulation = ds.s.sequentialXor(
+          cases = $testCasesMopm3;
           resetAgent = true;
           shuffle = true
         )

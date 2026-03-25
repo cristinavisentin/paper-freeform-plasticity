@@ -1,7 +1,7 @@
 % REQUIRED CMD-LINE PARAMS: $seeds, $nOfEvals, $innerLayers
 
 @import("imports/cases.txt")
-@import("imports/problems.txt")
+@import("imports/problems/mopm-problem.txt")
 @import("imports/listeners.txt")
 @import("../import/mappers.txt")
 
@@ -63,8 +63,8 @@ ea.experiment(
     $maturePerformance;
     $increase;
     $inconsistency; 
-    $frozenScore;
-    $stateTraj;
-    $archivesP
+    $mopmFrozenScore;
+    $stateTrajMopm;
+    $archivesMopm
   ]
 )

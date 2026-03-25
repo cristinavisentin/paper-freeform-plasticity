@@ -1,0 +1,43 @@
+$lastIndexesParity5 = [-96:1:-1]    % last 96 (=10%)
+$firstIndexesParity5 = [0:1:95]     % last 96 (=10%)
+
+$qFunctions = f.allNamed(fs = m.sKeyMap(
+  keys = [maturePerformance; increase; inconsistency];
+  values = [
+    ds.e.sBool.avgScore(
+      scoreType = boolean;
+      caseIndexes = $lastIndexesParity5
+    );
+    ea.f.numExpr(
+      expr = "-(x2;x1)";
+      args = [
+        ds.e.sBool.avgScore(
+          scoreType = unlimited;
+          caseIndexes = $firstIndexesParity5
+        );
+        ds.e.sBool.avgScore(
+          scoreType = unlimited;
+          caseIndexes = $lastIndexesParity5
+        )
+      ]
+    );
+    ds.e.sBool.sdScore(
+      scoreType = unlimited;
+      indexes = $lastIndexesParity5
+    )
+  ]
+))
+
+$parityProblem = ea.p.simToTo(
+  name = "parity";
+  simulation = ds.s.sequentialBf(
+    cases = $casesParity5;
+    target = ea.misc.evenParityBf(n = 5);
+    rewardType = unlimited;
+    resetAgent = true
+  );
+  dT = 1;
+  tRange = $tRangeParity5;
+  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
+  qFunction = $qFunctions
+)

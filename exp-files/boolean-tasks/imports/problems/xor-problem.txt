@@ -1,10 +1,5 @@
 $lastIndexesXor = [-40:1:-1]        % last 40 (=10%)
-$lastIndexesParity5 = [-96:1:-1]    % last 96 (=10%)
-$lastIndexesMopm3 = [-192:1:-1]     % last 192 (=10%)
-
 $firstIndexesXor = [0:1:39]         % first 40 (=10%)
-$firstIndexesParity5 = [0:1:95]     % last 96 (=10%)
-$firstIndexesMopm3 = [0:1:191]      % last 192 (=10%)
 
 $qFunctions = f.allNamed(fs = m.sKeyMap(
   keys = [maturePerformance; increase; inconsistency];
@@ -46,32 +41,4 @@ $xorProblem = ea.p.simsToTo(
   comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
   qFunction = $qFunctions;
   aggregator = f.mapAggregate(aggregateF = f.avg())
-)
-
-$parityProblem = ea.p.simToTo(
-  name = "parity";
-  simulation = ds.s.sequentialBf(
-    cases = $casesParity5;
-    target = ea.misc.evenParityBf(n = 5);
-    rewardType = unlimited;
-    resetAgent = true
-  );
-  dT = 1;
-  tRange = $tRangeParity5;
-  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
-  qFunction = $qFunctions
-)
-
-$mopmProblem = ea.p.simToTo(
-  name = "mopm";
-  simulation = ds.s.sequentialBf(
-    cases = $casesMopm3;
-    target = ea.misc.mopmBf(n = 3);
-    rewardType = unlimited;
-    resetAgent = true
-  );
-  dT = 1;
-  tRange = $tRangeMopm3;
-  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
-  qFunction = $qFunctions
 )
