@@ -322,8 +322,8 @@ $archivesXor = ea.l.savePlotAndCsvForRun(
 $archivesParity = ea.l.savePlotAndCsvForRun(
   path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
   plot = ea.plot.single.me(values = [
-    f.mapValue(key = maturePerformance; of = ea.f.quality());
-    ds.e.sBool.avgScore(
+    f.as(name = "fitness"; of = f.mapValue(key = maturePerformance; of = ea.f.quality()));
+    f.as(name = "frozen"; of = ds.e.sBool.avgScore(
       scoreType = unlimited;
       caseIndexes = [0:1:31];
       of = ds.f.simulate(
@@ -338,7 +338,7 @@ $archivesParity = ea.l.savePlotAndCsvForRun(
           shuffle = true
         )
       )
-    )
+    ))
   ]);
   kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
   type = $imgType
@@ -347,8 +347,8 @@ $archivesParity = ea.l.savePlotAndCsvForRun(
 $archivesMopm = ea.l.savePlotAndCsvForRun(
   path = $basePath + "/{solver.name}/archives/me-archives-{randomGenerator.seed:%02d}." + $imgType;
   plot = ea.plot.single.me(values = [
-    f.mapValue(key = maturePerformance; of = ea.f.quality());
-    ds.e.sBool.avgScore(
+    f.as(name = "fitness"; of = f.mapValue(key = maturePerformance; of = ea.f.quality()));
+    f.as(name = "frozen"; of = ds.e.sBool.avgScore(
       scoreType = unlimited;
       caseIndexes = [0:1:63];
       of = ds.f.simulate(
@@ -363,7 +363,7 @@ $archivesMopm = ea.l.savePlotAndCsvForRun(
           shuffle = true
         )
       )
-    )
+    ))
   ]);
   kCondition = predicate.matches(f = f.mappableKey(key = "solver.name"); regex = "me.*");
   type = $imgType
