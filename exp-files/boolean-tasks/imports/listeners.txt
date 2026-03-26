@@ -54,14 +54,17 @@ $orReset = ea.l.savePlotForExp(
   plot = ea.plot.multi.xyExp(
     y = f.as(name = "or-reset"; of = ds.e.sBool.avgScore(
       scoreType = unlimited;
-      caseIndexes = [360:1:399];
+      caseIndexes = [-40:1:-1];
       of = ds.f.simulate(
         of = f.copy(of = ea.f.solution(of = ea.f.best()));
         dT = 1;
         tRange = $tRangeXor;
         simulation = ds.s.sequentialBf(
           cases = $casesXor; 
-          target = ea.misc.bf(exprs = ["or(0;1)"]); resetAgent = true; shuffle = true)
+          target = ea.misc.bf(exprs = ["or(0;1)"]); 
+          resetAgent = true; 
+          shuffle = true
+        )
       )
     ))
   );
@@ -73,14 +76,17 @@ $orNoReset = ea.l.savePlotForExp(
   plot = ea.plot.multi.xyExp(
     y = f.as(name = "or-no-reset"; of = ds.e.sBool.avgScore(
       scoreType = unlimited;
-      caseIndexes = [360:1:399];
+      caseIndexes = [-40:1:-1];
       of = ds.f.simulate(
         of = f.copy(of = ea.f.solution(of = ea.f.best()));
         dT = 1;
         tRange = $tRangeXor;
         simulation = ds.s.sequentialBf(
           cases = $casesXor; 
-          target = ea.misc.bf(exprs = ["or(0;1)"]); resetAgent = false; shuffle = true)
+          target = ea.misc.bf(exprs = ["or(0;1)"]); 
+          resetAgent = false; 
+          shuffle = true
+        )
       )
     ))
   );
@@ -90,13 +96,9 @@ $orNoReset = ea.l.savePlotForExp(
 $stateTrajXor = ea.l.saveForRun(
   of = ea.acc.lastBest();
   processor = ds.f.agentStateTrajectory(
-    of = ea.f.solution();
+    of = f.copy(of = ea.f.solution());
     stateF = ds.f.params();
-    sat = ds.s.sequentialXor(
-      cases = $casesXor;
-      resetAgent = true;
-      shuffle = true
-    );
+    sat = ds.s.sequentialXor(cases = $casesXor; resetAgent = true; shuffle = true);
     dT = 1;
     tRange = $tRangeXor
   );
@@ -128,27 +130,6 @@ $stateTrajCopyNoReset = ea.l.saveForRun(
     );
     consumer.saver(
       path = $basePath + "/{solver.name}/stateTajectories-copy-no-reset/best-state-{randomGenerator.seed:%02d}.tsv";
-      of = f.tdaMapToTable()
-    )
-  ]
-)
-
-$stateTrajCopyReset = ea.l.saveForRun(
-  of = ea.acc.lastBest();
-  processor = ds.f.agentStateTrajectory(
-    of = f.copy(of = ea.f.solution());
-    stateF = ds.f.params();
-    sat = ds.s.sequentialXor(cases = $casesXor; resetAgent = true; shuffle = true);
-    dT = 1;
-    tRange = $tRangeXor
-  );
-  consumers = [
-    consumer.saver(
-      path = $basePath + "/{solver.name}/stateTajectories-copy-reset/best-state-{randomGenerator.seed:%02d}." + $imgType;
-      of = viz.f.toImage(drawer = ds.d.vectorialTrajectory(); type = $imgType)
-    );
-    consumer.saver(
-      path = $basePath + "/{solver.name}/stateTajectories-copy-reset/best-state-{randomGenerator.seed:%02d}.tsv";
       of = f.tdaMapToTable()
     )
   ]

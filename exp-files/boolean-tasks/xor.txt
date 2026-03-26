@@ -67,7 +67,6 @@ ea.experiment(
     $orNoReset;
     $stateTrajXor;
     $stateTrajCopyNoReset;
-    $stateTrajCopyReset;
     $xorFrozenPerformance;
     $archivesXor;
     $bestBehaviorCopyNoReset;
