@@ -34,7 +34,8 @@ $mopmProblem = ea.p.simsToTo(
     cases = $casesMopm3;
     target = ea.misc.mopmBf(n = 3);
     rewardType = unlimited;
-    resetAgent = true
+    resetAgent = true;
+    shuffle = true
   )];
   dT = 1;
   tRange = $tRangeMopm3;

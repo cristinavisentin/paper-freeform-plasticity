@@ -34,7 +34,8 @@ $parityProblem = ea.p.simsToTo(
     cases = $casesParity5;
     target = ea.misc.evenParityBf(n = 5);
     rewardType = unlimited;
-    resetAgent = true
+    resetAgent = true;
+    shuffle = true
   )];
   dT = 1;
   tRange = $tRangeParity5;

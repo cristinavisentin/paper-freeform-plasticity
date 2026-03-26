@@ -159,8 +159,10 @@ $stateTrajParity = ea.l.saveForRun(
   processor = ds.f.agentStateTrajectory(
     of = ea.f.solution();
     stateF = ds.f.params();
-    sat = ds.s.sequentialXor(
+    sat = ds.s.sequentialBf(
       cases = $casesParity5;
+      target = ea.misc.evenParityBf(n = 5);
+      rewardType = unlimited;
       resetAgent = true;
       shuffle = true
     );
@@ -184,8 +186,10 @@ $stateTrajMopm = ea.l.saveForRun(
   processor = ds.f.agentStateTrajectory(
     of = ea.f.solution();
     stateF = ds.f.params();
-    sat = ds.s.sequentialXor(
+    sat = ds.s.sequentialBf(
       cases = $casesMopm3;
+      target = ea.misc.mopmBf(n = 3);
+      rewardType = unlimited;
       resetAgent = true;
       shuffle = true
     );
@@ -235,8 +239,10 @@ $parityFrozenPerformance = ea.l.savePlotAndCsvForExp(
         of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution(of = ea.f.best()))));
         dT = 1;
         tRange = $tRangeFrozenParity5;
-        simulation = ds.s.sequentialXor(
+        simulation = ds.s.sequentialBf(
           cases = $testCasesParity5;
+          target = ea.misc.evenParityBf(n = 5);
+          rewardType = unlimited;
           resetAgent = true;
           shuffle = true
         )
@@ -256,8 +262,10 @@ $mopmFrozenPerformance = ea.l.savePlotAndCsvForExp(
         of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution(of = ea.f.best()))));
         dT = 1;
         tRange = $tRangeFrozenMopm3;
-        simulation = ds.s.sequentialXor(
+        simulation = ds.s.sequentialBf(
           cases = $testCasesMopm3;
+          target = ea.misc.mopmBf(n = 3);
+          rewardType = unlimited;
           resetAgent = true;
           shuffle = true
         )
@@ -341,8 +349,10 @@ $archivesParity = ea.l.savePlotAndCsvForRun(
         of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution())));
         dT = 1;
         tRange = $tRangeFrozenParity5;
-        simulation = ds.s.sequentialXor(
+        simulation = ds.s.sequentialBf(
           cases = $testCasesParity5;
+          target = ea.misc.evenParityBf(n = 5);
+          rewardType = unlimited;
           resetAgent = true;
           shuffle = true
         )
@@ -364,8 +374,10 @@ $archivesMopm = ea.l.savePlotAndCsvForRun(
         of = ds.f.asNumericalRLAgent(of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution())));
         dT = 1;
         tRange = $tRangeFrozenMopm3;
-        simulation = ds.s.sequentialXor(
+        simulation = ds.s.sequentialBf(
           cases = $testCasesMopm3;
+          target = ea.misc.mopmBf(n = 3);
+          rewardType = unlimited;
           resetAgent = true;
           shuffle = true
         )
