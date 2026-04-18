@@ -11,13 +11,13 @@ $tRange = m.range(min = 0; max = 60)
 $dIncrease = ea.s.me.d.descriptor(
   f = f.mapValue(key = increase; of = ea.f.quality()); 
   min = 0.0; 
-  max = 500.0; 
+  max = 0.1; 
   nOfBins = 10
 )
 $dInconsistency = ea.s.me.d.descriptor(
   f = f.mapValue(key = inconsistency; of = ea.f.quality()); 
   min = 0.0; 
-  max = 200.0; 
+  max = 0.01; 
   nOfBins = 10
 )
 

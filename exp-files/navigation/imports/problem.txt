@@ -1,6 +1,3 @@
-$trainEnviroment = (arena = $trainArenas)
-* [ds.e.navigation(randomGenerator = m.sharedRG())]
-
 $testEnviroment = (arena = $testArenas)
 * [ds.e.navigation(randomGenerator = m.sharedRG())]
 
@@ -8,32 +5,32 @@ $qFunctions = f.allNamed(
   fs = m.sKeyMap(
     keys = [maturePerformance; increase; inconsistency];
     values = [
-      f.avg(of = f.subList(from = 45; to = 50; relative = false));
+      f.avg(of = f.subList(from = 0.9; to = 1; relative = true));
       ea.f.numExpr(
         expr = "-(x2;x1)";
         args = [
-          f.avg(of = f.subList(from = 0; to = 5; relative = false));
-          f.avg(of = f.subList(from = 45; to = 50; relative = false))
+          f.avg(of = f.subList(from = 0; to = 0.1; relative = true));
+          f.avg(of = f.subList(from = 0.9; to = 1; relative = true))
         ]
       );
-      f.sd(of = f.subList(from = 45; to = 50; relative = false))
+      f.sd(of = f.subList(from = 0.9; to = 1; relative = true))
     ]
   );
-  of = f.each(mapF = ds.f.cumulatedReward())
+  of = ds.f.rewards()
 )
 
-$simToTo = ea.p.simToTo(
+$problem = ea.p.simsToTo(
+  name = "nav-lives";
+  simulations = 3 * [ds.sat.sequential(
+    tasks = 50 * [ds.srlat.fromNumericalEnvironment(
+      environment = ds.e.navigation(arena = $a_barrier);
+      reward = ds.e.nav.reward.reaching()
+    )];
+    resetFirst = true
+  )];
   dT = $dT;
   tRange = $tRange;
-  qFunction = f.identity();
-  comparator = ea.comparator.descending(of = ds.f.cumulatedReward())
-)
-
-$problem = ea.p.manyToCbto(
-  name = "train";
-  problems = (simulation = (environment = $trainEnviroment)
-    * [ds.srlat.fromNumericalEnvironment(reward = ds.e.nav.reward.reaching())])
-    * [$simToTo];
-  aggregator = $qFunctions;
-  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance))
+  comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
+  qFunction = $qFunctions;
+  aggregator = f.mapAggregate(aggregateF = f.avg())
 )

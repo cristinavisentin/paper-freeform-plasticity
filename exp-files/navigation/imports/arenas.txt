@@ -20,5 +20,4 @@ $u_barrier = ds.arena.prepared(
   targetYRange = m.range(min = 0.16; max = 0.16)
 )
 
-$trainArenas = 50 * [$a_barrier]
 $testArenas = [$a_barrier; $empty; $u_barrier]

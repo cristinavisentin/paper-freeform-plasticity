@@ -1,3 +1,5 @@
 jgea.jar
 .DS_Store
 todo.md
+.venv
+execution_time_analysis.ipynb
