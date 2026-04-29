@@ -1,7 +1,6 @@
 % REQUIRED CMD-LINE PARAMS: $seeds, $nOfEvals, $innerLayers
 
 $dT = 0.1
-$tRange = m.range(min = 0; max = 60)
 
 @import("imports/arenas.txt")
 @import("imports/problem.txt")
@@ -26,27 +25,9 @@ ea.experiment(
   * (problem = $problem)
   * (solver = (stop = ea.sc.nOfQualityEvaluations(n = $nOfEvals)) * [
     ea.s.mapElites(
-      name = "me-hebbian-network";
-      representation = ea.representation.doubleString();
-      mapper = $hebbianNetworkMapper;
-      descriptors = [$dIncrease; $dInconsistency]
-    );
-    ea.s.mapElites(
-      name = "me-hebbian-layer";
-      representation = ea.representation.doubleString();
-      mapper = $hebbianLayerMapper;
-      descriptors = [$dIncrease; $dInconsistency]
-    );
-    ea.s.mapElites(
       name = "me-hebbian-neuron";
       representation = ea.representation.doubleString();
       mapper = $hebbianNeuronMapper;
-      descriptors = [$dIncrease; $dInconsistency]
-    );
-    ea.s.mapElites(
-      name = "me-hebbian-synapse";
-      representation = ea.representation.doubleString();
-      mapper = $hebbianSynapseMapper;
       descriptors = [$dIncrease; $dInconsistency]
     );
     ea.s.mapElites(

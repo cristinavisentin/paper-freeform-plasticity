@@ -61,7 +61,7 @@ $frozenTrajs = ea.l.saveForRun(
       of = ds.f.stateless(of = ds.f.nonLearning(of = ea.f.solution()));
       fs = (simulation = (environment = $testEnviroment)
       * [ds.sat.fromEnvironment()])
-      * [ds.f.simulate(dT = $dT; tRange = $tRange)]
+      * [ds.f.simulate(dT = $dT; tRange = m.range(min = 0; max = 60))]
     );
     type = $imgType
   )

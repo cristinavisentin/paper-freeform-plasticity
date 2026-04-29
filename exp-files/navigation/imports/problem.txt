@@ -21,15 +21,15 @@ $qFunctions = f.allNamed(
 
 $problem = ea.p.simsToTo(
   name = "nav-lives";
-  simulations = 3 * [ds.sat.sequential(
-    tasks = 50 * [ds.srlat.fromNumericalEnvironment(
+  simulations = 2 * [ds.sat.sequential(
+    tasks = 20 * [ds.srlat.fromNumericalEnvironment(
       environment = ds.e.navigation(arena = $a_barrier);
       reward = ds.e.nav.reward.reaching()
     )];
     resetFirst = true
   )];
   dT = $dT;
-  tRange = $tRange;
+  tRange = m.range(min = 0; max = 1200);
   comparator = ea.comparator.descending(of = f.mapValue(key = maturePerformance));
   qFunction = $qFunctions;
   aggregator = f.mapAggregate(aggregateF = f.avg())
