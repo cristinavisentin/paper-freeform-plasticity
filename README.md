@@ -96,7 +96,16 @@ java \
 ```
 
 ### 2D navigation task
-todo 
+```bash
+java \
+  -jar jgea.jar \
+  -nt <threads> \
+  -f exp-files/navigation/rl-navigation.txt \
+  --expHeadLines \
+    '$nOfEvals = 40000' \
+    '$seeds = [1:1:5]' \
+    '$innerLayers = [8]'
+```
 
 ## More experiments (not shown in the paper)
 #### The free-form modulable expressiveness (on the XOR task)
