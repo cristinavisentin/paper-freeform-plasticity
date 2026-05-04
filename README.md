@@ -1,5 +1,5 @@
 # paper-freeform-plasticity
-This repository contains the software artifacts and experiment configurations used in the study on **free-form plasticity mechanisms for neural networks**.
+This repository contains the software artifacts and experimental configurations used in the study of **free-form plasticity mechanisms for neural networks**.
 
 It allows you to reproduce the experimental results presented in the paper, including all reported figures.
 
@@ -122,4 +122,4 @@ java \
 
 ## Notes
 - Results (plots and logs) are generated in the `results` directory.
-- Execution time may vary depending on the number of threads and seeds.
+- Execution time may vary, depending on the number of threads used.
