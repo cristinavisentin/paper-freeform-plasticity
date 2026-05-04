@@ -8,28 +8,36 @@ It allows you to reproduce the experimental results presented in the paper, incl
 ## How to reproduce the experiments
 ### Requirements
 - JDK 25
-- Git LFS (required to retrieve large binary files)
-
-
+- Maven 
+- Git
 
 ### Setup
-#### 1. Clone this repository
+#### 1. Download the code
+Download and extract the ZIP archive of this repository in your working directory.
+Move into the project directory:
+
 ```bash
-git clone https://github.com/cristinavisentin/paper-freeform-plasticity.git    
-cd paper-freeform-plasticity                  
+cd paper-freeform-plasticity*
 ```
-#### 2. Retrieve required files (Git LFS)
+
+#### 2. Build the JGEA framework
+These experiments rely on [JGEA](https://github.com/ericmedvet/jgea), an evolutionary computation framework used to run optimization experiments.
+Since the executable JAR is not provided here, you must build it from source:
 ```bash
-git lfs pull
+git clone https://github.com/ericmedvet/jgea.git
+cd jgea
+git checkout develop
+mvn clean package -U
 ```
-If Git LFS is not installed, run:
+
+#### 3. Link the executable
+Copy the generated JAR file into the project directory:
 ```bash
-git lfs install
+cd ..
+cp jgea/io.github.ericmedvet.jgea.experimenter/target/jgea.experimenter-2.8.2-SNAPSHOT-jar-with-dependencies.jar jgea.jar                       
 ```
 
 ## Experiments
-These experiments rely on [JGEA](https://github.com/ericmedvet/jgea), an evolutionary computation framework used to run optimization experiments. 
-
 The experiments compare **free-form plasticity** against four variants of **ABCD-Hebbian learning** (Synapse-, Neuron-, Layer-, and Network-ABCD) evolved using the **MAP-Elites** algorithm (unless otherwise specified). 
 
 The default neural network is a multilayer perceptron (MLP) with architecture: $l=(2, 2, 1)$.
