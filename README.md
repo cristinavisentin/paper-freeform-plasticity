@@ -14,7 +14,7 @@ It allows you to reproduce the experimental results presented in the paper, incl
 ### Setup
 #### 1. Download the code
 Download and extract the ZIP archive of this repository in your working directory.
-Move into the project directory:
+Then, move into the project directory:
 
 ```bash
 cd paper-freeform-plasticity*
@@ -37,6 +37,8 @@ cd ..
 cp jgea/io.github.ericmedvet.jgea.experimenter/target/jgea.experimenter-2.8.2-SNAPSHOT-jar-with-dependencies.jar jgea.jar                       
 ```
 
+
+
 ## Experiments
 The experiments compare **free-form plasticity** against four variants of **ABCD-Hebbian learning** (Synapse-, Neuron-, Layer-, and Network-ABCD) evolved using the **MAP-Elites** algorithm (unless otherwise specified). 
 
@@ -57,14 +59,13 @@ java \
     '$seeds = [1:1:30]' \
     '$innerLayers = [2]'
 ```
-#### 2. Testing different topologies on the XOR task
-You can run the experiment with different network structures, as shown in **Figure 4** of the paper, by modifying the `$innerLayers` parameter:
+#### 2. Testing different architectures on the XOR task
+You can run the experiment with different network sizes, as shown in **Figure 4** of the paper, by modifying the `$innerLayers` parameter:
 - Wide architecture $l=(2, 8, 1)$: set `$innerLayers = [8]`;
 - Deep architecture $l=(2, 2, 2, 1)$: set `$innerLayers = [2; 2]`.
 
-
 #### 3. Plasticity evolved through genetic algorithm (GA) on the XOR task
-To run the XOR task using a standard GA instead of MAP-Elites, as shown in **Figure 5** of the paper:
+To run the XOR task using a standard GA instead of MAP-Elites, as shown in **Figure 5** of the paper, run:
 ```bash
 java \
   -jar jgea.jar \
@@ -76,19 +77,9 @@ java \
     '$innerLayers = [2]'
 ```
 
-#### 4. The MOPM-3 task
-```bash
-java \
-  -jar jgea.jar \
-  -nt <threads> \
-  -f exp-files/booleans/mopm.txt \
-  --expHeadLines \
-    '$nOfEvals = 50000' \
-    '$seeds = [1:1:30]' \
-    '$innerLayers = [2]'
-```
-
-#### 5. The even parity-5 task
+#### 4. More complex boolean tasks
+#### The even parity-5 task
+To reproduce the results shown in **Figure 6** (left plot), run:
 ```bash
 java \
   -jar jgea.jar \
@@ -100,7 +91,35 @@ java \
     '$innerLayers = [2]'
 ```
 
-### 2D navigation task
+#### The MOPM-3 task
+To reproduce the results shown in **Figure 6** (right plot), run:
+```bash
+java \
+  -jar jgea.jar \
+  -nt <threads> \
+  -f exp-files/booleans/mopm.txt \
+  --expHeadLines \
+    '$nOfEvals = 50000' \
+    '$seeds = [1:1:30]' \
+    '$innerLayers = [2]'
+```
+
+
+
+## More experiments (not shown in the paper)
+To test the free-form modulable expressiveness (on the XOR task), run:
+```bash
+java \
+  -jar jgea.jar \
+  -nt <threads> \
+  -f exp-files/booleans/xor-building-blocks.txt \
+  --expHeadLines \
+    '$nOfEvals = 25000' \
+    '$seeds = [1:1:30]' \
+    '$innerLayers = [2]'
+```
+
+To reproduce experiments on a 2D simulated robot navigation problem, run:
 ```bash
 java \
   -jar jgea.jar \
@@ -112,18 +131,7 @@ java \
     '$innerLayers = [8]'
 ```
 
-## More experiments (not shown in the paper)
-#### The free-form modulable expressiveness (on the XOR task)
-```bash
-java \
-  -jar jgea.jar \
-  -nt <threads> \
-  -f exp-files/booleans/xor-building-blocks.txt \
-  --expHeadLines \
-    '$nOfEvals = 25000' \
-    '$seeds = [1:1:30]' \
-    '$innerLayers = [2]'
-```
+
 
 ## Notes
 - Results (plots and logs) are generated in the `results` directory.
